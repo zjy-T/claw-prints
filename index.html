@@ -11,17 +11,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:           #0c0c0c;
-      --surface:      #131313;
-      --border:       #1e1e1e;
-      --border-mid:   #282828;
-      --text:         #cdc8be;
-      --heading:      #f0ebe0;
-      --muted:        #525252;
-      --muted-plus:   #777;
-      --accent:       #c9a84c;
-      --accent-dim:   #8a6e2e;
-      --status-pub:   #4a8a60;
+      --bg:           #FDFDFD;
+      --surface:      #FFFFFF;
+      --border:       #e2e8f0;
+      --border-mid:   #cbd5e1;
+      --text:         #1e293b;
+      --heading:      #020617;
+      --muted:        #64748b;
+      --muted-plus:   #334155;
+      --accent:       #8a6e2e;
+      --accent-dim:   #6b5322;
+      --status-pub:   #166534;
       --font-prose:   'Source Serif 4', Georgia, 'Times New Roman', serif;
       --font-ui:      'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --col:          720px;
@@ -107,10 +107,14 @@
       align-items: center;
       gap: 0.35rem 0.5rem;
       letter-spacing: 0.015em;
+      padding: 0.9rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
     }
 
     .t-sep {
-      color: var(--border-mid);
+      color: var(--muted);
       user-select: none;
     }
 
@@ -181,8 +185,7 @@
 
     .featured .telemetry {
       margin-bottom: 2.75rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 0 rgba(148, 163, 184, 0.12);
     }
 
     /* ─── Prose sections ─── */
@@ -415,6 +418,7 @@
 
     .archive-article .telemetry {
       margin-bottom: 2rem;
+      box-shadow: 0 1px 0 rgba(148, 163, 184, 0.08);
     }
 
     .archive-article .section-prose p {
@@ -486,8 +490,9 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #0f0f0f;
-      border-bottom: 2px solid var(--accent);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-mid);
+      box-shadow: 0 1px 0 rgba(148, 163, 184, 0.12);
       padding: 0.6rem 0;
     }
 
@@ -611,7 +616,7 @@
 
     .edit-input, .edit-textarea, .edit-select {
       width: 100%;
-      background: var(--bg);
+      background: var(--surface);
       color: var(--text);
       border: 1px solid var(--border-mid);
       border-radius: 2px;
