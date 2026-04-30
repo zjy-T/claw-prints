@@ -6,20 +6,26 @@
   <title>Claw Prints</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Reset & Base ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0d0d0d;
-      --surface:  #141414;
-      --border:   #1f1f1f;
-      --text:     #c8c8c8;
-      --muted:    #555;
-      --accent:   #c9a84c;
-      --accent-dim: #8a6e2e;
-      --font:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --bg:           #0c0c0c;
+      --surface:      #131313;
+      --border:       #1e1e1e;
+      --border-mid:   #282828;
+      --text:         #cdc8be;
+      --heading:      #f0ebe0;
+      --muted:        #525252;
+      --muted-plus:   #777;
+      --accent:       #c9a84c;
+      --accent-dim:   #8a6e2e;
+      --status-pub:   #4a8a60;
+      --font-prose:   'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --font-ui:      'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --col:          720px;
+      --pad:          2rem;
     }
 
     html { scroll-behavior: smooth; }
@@ -27,263 +33,1110 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
+      font-family: var(--font-prose);
+      font-size: 17px;
       line-height: 1.75;
       min-height: 100vh;
-      /* subtle noise texture */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
     }
 
     /* ─── Layout ─── */
     .container {
-      max-width: 720px;
+      max-width: var(--col);
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 var(--pad);
     }
 
-    /* ─── Header / Hero ─── */
-    header {
-      padding: 7rem 0 5rem;
+    /* ─── Masthead ─── */
+    .masthead {
+      padding: 5.5rem 0 3.5rem;
       border-bottom: 1px solid var(--border);
     }
 
-    .site-label {
-      font-size: 11px;
-      letter-spacing: 0.25em;
+    .masthead-rule {
+      width: 2.5rem;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 1.75rem;
+    }
+
+    .pub-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.1rem;
     }
 
-    h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
+    .pub-name {
+      font-family: var(--font-prose);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
     }
 
-    .tagline {
+    .pub-tagline {
+      font-family: var(--font-prose);
       font-size: 15px;
-      color: var(--text);
-      max-width: 540px;
-      margin-bottom: 1rem;
       font-style: italic;
       font-weight: 300;
+      color: var(--text);
+      max-width: 520px;
+      line-height: 1.65;
+      margin-bottom: 0.85rem;
     }
 
-    .smallprint {
-      font-size: 12px;
+    .pub-smallprint {
+      font-family: var(--font-ui);
+      font-size: 11px;
       color: var(--muted);
+      letter-spacing: 0.02em;
     }
 
-    /* ─── Era Sections ─── */
-    .eras {
+    /* ─── Telemetry band ─── */
+    .telemetry {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--muted-plus);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem 0.5rem;
+      letter-spacing: 0.015em;
+    }
+
+    .t-sep {
+      color: var(--border-mid);
+      user-select: none;
+    }
+
+    .t-status {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 1px 5px 1px;
+      border-radius: 2px;
+    }
+
+    .t-status.published {
+      color: var(--status-pub);
+      border: 1px solid var(--status-pub);
+    }
+
+    .t-status.draft {
+      color: var(--muted);
+      border: 1px solid var(--border-mid);
+    }
+
+    .t-link {
+      color: var(--accent-dim);
+      text-decoration: none;
+      transition: color 0.12s;
+    }
+
+    .t-link:hover { color: var(--accent); }
+
+    /* ─── Featured article ─── */
+    .featured {
       padding: 4rem 0;
-    }
-
-    .era {
-      padding: 3.5rem 0;
       border-bottom: 1px solid var(--border);
     }
 
-    .era:last-child {
-      border-bottom: none;
-    }
-
-    .era-meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .era-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
+    .article-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
       color: var(--accent);
+      margin-bottom: 1.25rem;
     }
 
-    .era-period {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-    }
-
-    .era-period::before {
-      content: '//';
-      margin-right: 0.5rem;
-      color: var(--border);
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: -0.01em;
+    .featured .article-title {
+      font-family: var(--font-prose);
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      line-height: 1.12;
       margin-bottom: 1rem;
     }
 
-    .era-summary {
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
+    .featured .article-dek {
+      font-family: var(--font-prose);
+      font-size: 17px;
+      font-style: italic;
       font-weight: 300;
+      color: var(--text);
+      line-height: 1.65;
+      max-width: 600px;
+      margin-bottom: 1.25rem;
     }
 
-    .lessons {
+    .featured .telemetry {
+      margin-bottom: 2.75rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ─── Prose sections ─── */
+    .section-prose {
+      margin-bottom: 0.5rem;
+    }
+
+    .section-prose p {
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.82;
+      margin-bottom: 1.5em;
+    }
+
+    .section-prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-heading {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 1.1rem;
+      margin-top: 2.75rem;
+    }
+
+    /* ─── Lessons sections ─── */
+    .section-lessons {
+      margin-top: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lessons-heading {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted-plus);
+      margin-bottom: 1rem;
+    }
+
+    .lessons-list {
       list-style: none;
       border-left: 2px solid var(--accent-dim);
       padding-left: 1.25rem;
-      margin-bottom: 1.5rem;
     }
 
-    .lessons li {
+    .lessons-list li {
+      font-family: var(--font-ui);
       font-size: 13px;
-      color: var(--muted);
-      padding: 0.2rem 0;
+      color: var(--muted-plus);
+      padding: 0.3rem 0;
+      line-height: 1.6;
       position: relative;
     }
 
-    .lessons li::before {
+    .lessons-list li::before {
       content: '→';
       position: absolute;
-      left: -1.25rem;
+      left: -1.3rem;
       color: var(--accent-dim);
+      font-size: 10px;
+      top: 0.38rem;
+    }
+
+    /* ─── Diagram sections ─── */
+    .section-diagram {
+      margin: 2.5rem 0;
+    }
+
+    .diagram-figure {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .diagram-figure svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .diagram-caption {
+      font-family: var(--font-ui);
       font-size: 11px;
-      top: 0.25rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      padding: 0.65rem 1rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
     }
 
-    .era-link {
-      display: inline-block;
-      font-size: 12px;
-      letter-spacing: 0.1em;
+    /* ─── Quote sections ─── */
+    .section-quote {
+      margin: 2.5rem 0;
+      border-left: 3px solid var(--accent);
+      padding: 1.1rem 1.5rem;
+      background: var(--surface);
+    }
+
+    .quote-text {
+      font-family: var(--font-prose);
+      font-size: 18px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--heading);
+      line-height: 1.65;
+      margin: 0 0 0.4rem;
+    }
+
+    .quote-attribution {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--muted-plus);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── Checklist sections ─── */
+    .section-checklist {
+      margin-top: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .checklist-heading {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent-dim);
-      padding: 0.4rem 0.9rem;
-      transition: background 0.15s, color 0.15s;
+      color: var(--muted-plus);
+      margin-bottom: 1rem;
     }
 
-    .era-link:hover {
-      background: var(--accent);
-      color: var(--bg);
+    .checklist-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .checklist-list li {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      line-height: 1.55;
+      display: flex;
+      align-items: baseline;
+      gap: 0.65rem;
+    }
+
+    .check-mark {
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+
+    .checklist-list li.checked { color: var(--muted-plus); }
+    .checklist-list li.checked .check-mark { color: var(--status-pub); }
+    .checklist-list li.unchecked { color: var(--muted); }
+    .checklist-list li.unchecked .check-mark { color: var(--border-mid); }
+
+    /* ─── Archive divider ─── */
+    .archive-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 3.5rem 0 0;
+    }
+
+    .archive-divider-label {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .archive-divider-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── Archive articles ─── */
+    .archive-article {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .archive-article:last-child {
+      border-bottom: none;
+      padding-bottom: 1rem;
+    }
+
+    .article-type-label {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+    }
+
+    .archive-article .article-title {
+      font-family: var(--font-prose);
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: -0.015em;
+      line-height: 1.18;
+      margin-bottom: 0.75rem;
+    }
+
+    .archive-article .article-dek {
+      font-family: var(--font-prose);
+      font-size: 15px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .archive-article .telemetry {
+      margin-bottom: 2rem;
+    }
+
+    .archive-article .section-prose p {
+      font-size: 16px;
     }
 
     /* ─── Footer ─── */
     footer {
-      padding: 3rem 0 5rem;
+      margin-top: 2rem;
+      padding: 2.5rem 0 5rem;
       border-top: 1px solid var(--border);
     }
 
     .footer-text {
-      font-size: 12px;
+      font-family: var(--font-ui);
+      font-size: 11px;
       color: var(--muted);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.02em;
     }
 
     .footer-link {
-      font-size: 12px;
+      font-family: var(--font-ui);
+      font-size: 11px;
       color: var(--accent-dim);
       text-decoration: none;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
+      transition: color 0.12s;
     }
 
-    .footer-link:hover {
-      color: var(--accent);
-    }
+    .footer-link:hover { color: var(--accent); }
 
-    /* ─── Loading state ─── */
-    .loading {
+    .footer-methodology {
+      font-family: var(--font-ui);
+      font-size: 10px;
       color: var(--muted);
-      font-size: 13px;
-      padding: 4rem 0;
+      letter-spacing: 0.02em;
+      margin-top: 1.25rem;
+      opacity: 0.65;
+    }
+
+    /* ─── Telemetry extras ─── */
+    .t-unavailable {
+      color: var(--muted);
       font-style: italic;
+    }
+
+    .t-updated {
+      color: var(--accent-dim);
+    }
+
+    /* ─── Loading / error ─── */
+    .loading {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--muted);
+      padding: 4rem 0;
+      letter-spacing: 0.02em;
     }
 
     /* ─── Scrollbar ─── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb { background: var(--border-mid); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+
+    /* ─── Edit Mode ─── */
+    #draft-banner {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0f0f0f;
+      border-bottom: 2px solid var(--accent);
+      padding: 0.6rem 0;
+    }
+
+    .draft-banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .draft-banner-label {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-right: 0.75rem;
+    }
+
+    .draft-banner-desc {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--muted-plus);
+    }
+
+    .draft-banner-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    .draft-btn {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-plus);
+      background: none;
+      border: 1px solid var(--border-mid);
+      border-radius: 2px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: color 0.12s, border-color 0.12s;
+    }
+
+    .draft-btn:hover { color: var(--accent); border-color: var(--accent-dim); }
+    .draft-btn.primary { color: var(--accent-dim); border-color: var(--accent-dim); }
+    .draft-btn.primary:hover { color: var(--accent); border-color: var(--accent); }
+
+    .edit-open-btn {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: color 0.12s, border-color 0.12s;
+    }
+
+    .edit-open-btn:hover { color: var(--accent); border-color: var(--accent-dim); }
+
+    .edit-panel {
+      border: 1px solid var(--border-mid);
+      border-radius: 4px;
+      background: var(--surface);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .edit-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .edit-panel-title {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+    }
+
+    .edit-close-btn {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: color 0.12s, border-color 0.12s;
+    }
+
+    .edit-close-btn:hover { color: var(--heading); border-color: var(--border-mid); }
+
+    .edit-field { margin-bottom: 1rem; }
+
+    .edit-label {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .edit-input, .edit-textarea, .edit-select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-mid);
+      border-radius: 2px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      padding: 0.4rem 0.6rem;
+      line-height: 1.5;
+      outline: none;
+      transition: border-color 0.12s;
+      resize: vertical;
+    }
+
+    .edit-input:focus, .edit-textarea:focus, .edit-select:focus {
+      border-color: var(--accent-dim);
+    }
+
+    .edit-textarea { min-height: 72px; }
+
+    .edit-textarea.mono {
+      font-family: 'SFMono-Regular', Menlo, monospace;
+      font-size: 11px;
+      min-height: 120px;
+    }
+
+    .edit-section-cards { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .edit-section-card {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1rem;
+    }
+
+    .edit-section-type {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .edit-panel-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      :root { --pad: 1.25rem; }
+
+      .masthead { padding: 3.5rem 0 2.5rem; }
+
+      .featured { padding: 3rem 0; }
+
+      .featured .telemetry { margin-bottom: 2rem; padding-bottom: 1.5rem; }
+
+      .archive-article { padding: 2.5rem 0; }
+
+      .archive-divider { padding-top: 2.5rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header id="hero">
-      <div class="site-label">Field Log</div>
-      <h1 id="site-name">Claw Prints</h1>
-      <p class="tagline" id="tagline"></p>
-      <p class="smallprint" id="smallprint"></p>
-    </header>
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-rule"></div>
+      <div class="pub-eyebrow">Field Log</div>
+      <h1 class="pub-name" id="pub-name">Claw Prints</h1>
+      <p class="pub-tagline" id="pub-tagline"></p>
+      <p class="pub-smallprint" id="pub-smallprint"></p>
+    </div>
+  </header>
 
-    <main class="eras" id="eras">
-      <p class="loading">loading field notes...</p>
-    </main>
+  <main>
+    <div class="container">
+      <div id="journal-content">
+        <p class="loading">loading field notes…</p>
+      </div>
+    </div>
+  </main>
 
-    <footer>
+  <footer>
+    <div class="container">
       <p class="footer-text" id="footer-text"></p>
       <a class="footer-link" id="footer-link" href="#" target="_blank" rel="noopener"></a>
-    </footer>
-  </div>
+      <p class="footer-methodology">Read time estimated at 215 wpm where not recorded. Build time sourced from session logs.</p>
+    </div>
+  </footer>
 
   <script>
-    async function render() {
-      const res = await fetch('./data/content.json?v=' + Date.now());
-      const data = await res.json();
+    function formatDate(iso) {
+      const d = new Date(iso + 'T12:00:00Z');
+      return d.toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
+      });
+    }
 
-      // Hero
-      document.getElementById('site-name').textContent = data.site.name;
-      document.getElementById('tagline').textContent = data.site.tagline;
-      document.getElementById('smallprint').textContent = data.site.smallprint;
+    function escape(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
 
-      // Footer
+    function normalizeTelemetry(article) {
+      const t = { ...(article.telemetry || {}) };
+
+      if (t.readTimeMinutes == null) {
+        const text = (article.sections || []).map(s => {
+          if (s.type === 'prose') return s.content || '';
+          if (s.type === 'lessons') return (s.items || []).join(' ');
+          if (s.type === 'quote') return s.text || '';
+          if (s.type === 'checklist') return (s.items || []).map(i => i.text).join(' ');
+          return '';
+        }).join(' ');
+        const words = text.trim().split(/\s+/).filter(Boolean).length;
+        t.readTimeMinutes = Math.max(1, Math.round(words / 215));
+        t._readTimeDerived = true;
+      }
+
+      return t;
+    }
+
+    function buildTelemetry(article) {
+      const t = normalizeTelemetry(article);
+
+      const buildTimeHtml = t.agentBuildMinutes != null
+        ? `<span class="t-buildtime">${escape(t.agentBuildMinutes)} min build</span>`
+        : `<span class="t-buildtime t-unavailable">build time unavailable</span>`;
+
+      const parts = [
+        `<span class="t-date">${escape(formatDate(article.publishDate))}</span>`,
+        `<span class="t-sep">·</span>`,
+        `<span class="t-readtime">${escape(t.readTimeMinutes)} min read</span>`,
+        `<span class="t-sep">·</span>`,
+        `<span class="t-agents">${escape(article.agents.join(', '))}</span>`,
+        `<span class="t-sep">·</span>`,
+        `<span class="t-status ${escape(article.status)}">${escape(article.status)}</span>`,
+        `<span class="t-sep">·</span>`,
+        buildTimeHtml,
+      ];
+
+      if (article.updatedAt && article.updatedAt !== article.publishDate) {
+        parts.push(
+          `<span class="t-sep">·</span>`,
+          `<span class="t-updated">updated ${escape(formatDate(article.updatedAt))}</span>`
+        );
+      }
+
+      if (Array.isArray(article.links)) {
+        article.links.forEach(link => {
+          parts.push(
+            `<span class="t-sep">·</span>`,
+            `<a class="t-link" href="${escape(link.url)}" target="_blank" rel="noopener">${escape(link.label)} ↗</a>`
+          );
+        });
+      }
+
+      return `<div class="telemetry">${parts.join('')}</div>`;
+    }
+
+    function buildSections(sections) {
+      return sections.map(section => {
+        if (section.type === 'prose') {
+          const heading = section.heading
+            ? `<div class="section-heading">${escape(section.heading)}</div>`
+            : '';
+          const paras = section.content
+            .split('\n\n')
+            .map(p => p.trim())
+            .filter(Boolean)
+            .map(p => `<p>${escape(p)}</p>`)
+            .join('');
+          return `<div class="section-prose">${heading}${paras}</div>`;
+        }
+
+        if (section.type === 'lessons') {
+          const heading = section.heading
+            ? `<div class="lessons-heading">${escape(section.heading)}</div>`
+            : '';
+          const items = section.items
+            .map(item => `<li>${escape(item)}</li>`)
+            .join('');
+          return `<div class="section-lessons">${heading}<ul class="lessons-list">${items}</ul></div>`;
+        }
+
+        if (section.type === 'diagram') {
+          const caption = section.caption
+            ? `<figcaption class="diagram-caption">${escape(section.caption)}</figcaption>`
+            : '';
+          return `<figure class="section-diagram"><div class="diagram-figure">${section.svg}</div>${caption}</figure>`;
+        }
+
+        if (section.type === 'quote') {
+          const attribution = section.attribution
+            ? `<cite class="quote-attribution">— ${escape(section.attribution)}</cite>`
+            : '';
+          return `<blockquote class="section-quote"><p class="quote-text">${escape(section.text)}</p>${attribution}</blockquote>`;
+        }
+
+        if (section.type === 'checklist') {
+          const heading = section.heading
+            ? `<div class="checklist-heading">${escape(section.heading)}</div>`
+            : '';
+          const items = section.items.map(item => {
+            const cls = item.checked ? 'checked' : 'unchecked';
+            const mark = item.checked ? '✓' : '○';
+            return `<li class="${cls}"><span class="check-mark">${mark}</span><span>${escape(item.text)}</span></li>`;
+          }).join('');
+          return `<div class="section-checklist">${heading}<ul class="checklist-list">${items}</ul></div>`;
+        }
+
+        return '';
+      }).join('');
+    }
+
+    // ─── Edit Mode State ───
+    let draftData = null;
+    let editMode  = false;
+    const DRAFT_KEY = 'clawprints_draft';
+
+    function isEditMode() {
+      const h = location.hostname;
+      const local = h === 'localhost' || h === '127.0.0.1' || location.protocol === 'file:';
+      return local && new URLSearchParams(location.search).get('edit') === '1';
+    }
+
+    function loadLocalDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch { return null; }
+    }
+
+    function exportDraftAsJson(data) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'content-draft.json';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    function renderDraftBanner() {
+      if (document.getElementById('draft-banner')) return;
+      const banner = document.createElement('div');
+      banner.id = 'draft-banner';
+      banner.innerHTML = `
+        <div class="container">
+          <div class="draft-banner-inner">
+            <div>
+              <span class="draft-banner-label">Draft Preview</span>
+              <span class="draft-banner-desc">Edit mode active — changes are local until exported</span>
+            </div>
+            <div class="draft-banner-actions">
+              <button class="draft-btn primary" id="btn-save-draft">Save Draft</button>
+              <button class="draft-btn" id="btn-reset-draft">Reset Draft</button>
+              <button class="draft-btn" id="btn-export-draft">Export JSON</button>
+            </div>
+          </div>
+        </div>`;
+      document.body.insertAdjacentElement('afterbegin', banner);
+
+      document.getElementById('btn-save-draft').addEventListener('click', () => {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData, null, 2));
+        const btn = document.getElementById('btn-save-draft');
+        btn.textContent = 'Saved ✓';
+        setTimeout(() => { btn.textContent = 'Save Draft'; }, 1500);
+      });
+
+      document.getElementById('btn-reset-draft').addEventListener('click', () => {
+        if (confirm('Reset all draft changes? This will restore the original content.json.')) {
+          localStorage.removeItem(DRAFT_KEY);
+          location.reload();
+        }
+      });
+
+      document.getElementById('btn-export-draft').addEventListener('click', () => {
+        exportDraftAsJson(draftData);
+      });
+    }
+
+    function addEditTrigger(articleEl, articleData) {
+      const btn = document.createElement('button');
+      btn.className = 'edit-open-btn';
+      btn.textContent = 'Edit article';
+      btn.addEventListener('click', () => openEditPanel(articleEl, articleData));
+      articleEl.appendChild(btn);
+    }
+
+    function sectionEditorHtml(section, idx) {
+      const label = `<div class="edit-section-type">${escape(section.type)} · section ${idx + 1}</div>`;
+      let fields = '';
+
+      if (section.type === 'prose') {
+        fields = `
+          <div class="edit-field">
+            <label class="edit-label">Heading (optional)</label>
+            <input class="edit-input" data-f="heading" value="${escape(section.heading || '')}" placeholder="none">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Content (blank line = paragraph break)</label>
+            <textarea class="edit-textarea" data-f="content" rows="6">${escape(section.content || '')}</textarea>
+          </div>`;
+      } else if (section.type === 'lessons') {
+        fields = `
+          <div class="edit-field">
+            <label class="edit-label">Heading (optional)</label>
+            <input class="edit-input" data-f="heading" value="${escape(section.heading || '')}" placeholder="none">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Items (one per line)</label>
+            <textarea class="edit-textarea" data-f="items" rows="4">${escape((section.items || []).join('\n'))}</textarea>
+          </div>`;
+      } else if (section.type === 'quote') {
+        fields = `
+          <div class="edit-field">
+            <label class="edit-label">Quote text</label>
+            <textarea class="edit-textarea" data-f="text" rows="3">${escape(section.text || '')}</textarea>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Attribution (optional)</label>
+            <input class="edit-input" data-f="attribution" value="${escape(section.attribution || '')}" placeholder="none">
+          </div>`;
+      } else if (section.type === 'checklist') {
+        const lines = (section.items || []).map(i => `${i.checked ? '[x]' : '[ ]'} ${i.text}`).join('\n');
+        fields = `
+          <div class="edit-field">
+            <label class="edit-label">Heading (optional)</label>
+            <input class="edit-input" data-f="heading" value="${escape(section.heading || '')}" placeholder="none">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Items ([x] checked · [ ] unchecked · one per line)</label>
+            <textarea class="edit-textarea" data-f="items" rows="5">${escape(lines)}</textarea>
+          </div>`;
+      } else if (section.type === 'diagram') {
+        fields = `
+          <div class="edit-field">
+            <label class="edit-label">Caption (optional)</label>
+            <input class="edit-input" data-f="caption" value="${escape(section.caption || '')}" placeholder="none">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">SVG source</label>
+            <textarea class="edit-textarea mono" data-f="svg" rows="9">${escape(section.svg || '')}</textarea>
+          </div>`;
+      }
+
+      return `<div class="edit-section-card" data-idx="${idx}">${label}${fields}</div>`;
+    }
+
+    function collectSection(cardEl, orig) {
+      const s  = { ...orig };
+      const v  = f => cardEl.querySelector(`[data-f="${f}"]`).value;
+      const vt = f => v(f).trim();
+
+      if (s.type === 'prose') {
+        s.heading = vt('heading') || undefined;
+        s.content = v('content');
+      } else if (s.type === 'lessons') {
+        s.heading = vt('heading') || undefined;
+        s.items   = v('items').split('\n').map(l => l.trim()).filter(Boolean);
+      } else if (s.type === 'quote') {
+        s.text        = vt('text');
+        s.attribution = vt('attribution') || undefined;
+      } else if (s.type === 'checklist') {
+        s.heading = vt('heading') || undefined;
+        s.items   = v('items').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+          const checked = /^\[[xX]\]/.test(l);
+          const text    = l.replace(/^\[[xX ]\]\s*/, '').trim();
+          return { text, checked };
+        });
+      } else if (s.type === 'diagram') {
+        s.caption = vt('caption') || undefined;
+        s.svg     = v('svg');
+      }
+      return s;
+    }
+
+    function openEditPanel(articleEl, articleData) {
+      const existing = articleEl.querySelector('.edit-panel');
+      if (existing) { existing.remove(); return; }
+
+      const statusOpts = ['published', 'draft'].map(st =>
+        `<option value="${st}"${articleData.status === st ? ' selected' : ''}>${st}</option>`
+      ).join('');
+
+      const secCards = (articleData.sections || []).map(sectionEditorHtml).join('');
+
+      const panel = document.createElement('div');
+      panel.className = 'edit-panel';
+      panel.innerHTML = `
+        <div class="edit-panel-header">
+          <span class="edit-panel-title">Editing · ${escape(articleData.id)}</span>
+          <button class="edit-close-btn">✕ Discard</button>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Title</label>
+          <input class="edit-input" id="ep-title" value="${escape(articleData.title)}">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Dek</label>
+          <textarea class="edit-textarea" id="ep-dek" rows="2">${escape(articleData.dek)}</textarea>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Status</label>
+          <select class="edit-select" id="ep-status">${statusOpts}</select>
+        </div>
+        <div class="edit-section-cards">${secCards}</div>
+        <div class="edit-panel-actions">
+          <button class="draft-btn primary" id="ep-apply">Apply Changes</button>
+        </div>`;
+
+      articleEl.appendChild(panel);
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      panel.querySelector('.edit-close-btn').addEventListener('click', () => panel.remove());
+
+      panel.querySelector('#ep-apply').addEventListener('click', () => {
+        const idx = draftData.articles.findIndex(a => a.id === articleData.id);
+        if (idx === -1) return;
+
+        const updated   = { ...draftData.articles[idx] };
+        updated.title   = panel.querySelector('#ep-title').value.trim();
+        updated.dek     = panel.querySelector('#ep-dek').value.trim();
+        updated.status  = panel.querySelector('#ep-status').value;
+        updated.updatedAt = new Date().toISOString().slice(0, 10);
+
+        const cards = panel.querySelectorAll('.edit-section-card');
+        updated.sections = Array.from(cards).map((card, i) =>
+          collectSection(card, draftData.articles[idx].sections[i])
+        );
+
+        draftData.articles[idx] = updated;
+        renderPage(draftData);
+        document.getElementById(articleData.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    function renderPage(data) {
+      const siteName = data.site.name;
+      document.title = siteName;
+      document.getElementById('pub-name').textContent      = siteName;
+      document.getElementById('pub-tagline').textContent   = data.site.tagline;
+      document.getElementById('pub-smallprint').textContent = data.site.smallprint;
+
       document.getElementById('footer-text').textContent = data.footer.text;
       const fl = document.getElementById('footer-link');
       fl.href = data.footer.dashboardUrl;
       fl.textContent = '↗ Agent Dashboard';
 
-      // Eras
-      const container = document.getElementById('eras');
-      container.innerHTML = '';
+      const articles = [...data.articles].sort(
+        (a, b) => new Date(b.publishDate) - new Date(a.publishDate)
+      );
 
-      data.eras.forEach((era, i) => {
-        const section = document.createElement('section');
-        section.className = 'era';
-        section.id = era.id;
+      const flagship = articles[0];
+      const archive  = articles.slice(1);
 
-        const meta = `
-          <div class="era-meta">
-            <span class="era-label">Era ${String(i + 1).padStart(2, '0')}</span>
-            <span class="era-period">${era.period}</span>
-          </div>`;
+      const journal = document.getElementById('journal-content');
+      journal.innerHTML = '';
 
-        const lessons = era.lessons.map(l => `<li>${l}</li>`).join('');
+      // ── Featured ──
+      const featuredEl = document.createElement('article');
+      featuredEl.className = 'featured';
+      featuredEl.id = flagship.id;
+      featuredEl.innerHTML = `
+        <div class="article-eyebrow">Latest · ${escape(flagship.type)}</div>
+        <h2 class="article-title">${escape(flagship.title)}</h2>
+        <p class="article-dek">${escape(flagship.dek)}</p>
+        ${buildTelemetry(flagship)}
+        ${buildSections(flagship.sections)}
+      `;
+      if (editMode) addEditTrigger(featuredEl, flagship);
+      journal.appendChild(featuredEl);
 
-        const link = era.link
-          ? `<a class="era-link" href="${era.link.url}" target="_blank" rel="noopener">${era.link.label} ↗</a>`
-          : '';
-
-        section.innerHTML = `
-          ${meta}
-          <h2>${era.title}</h2>
-          <p class="era-summary">${era.summary}</p>
-          <ul class="lessons">${lessons}</ul>
-          ${link}
+      // ── Archive ──
+      if (archive.length > 0) {
+        const divider = document.createElement('div');
+        divider.className = 'archive-divider';
+        divider.innerHTML = `
+          <span class="archive-divider-label">Archive</span>
+          <span class="archive-divider-rule"></span>
         `;
+        journal.appendChild(divider);
 
-        container.appendChild(section);
-      });
+        archive.forEach(article => {
+          const el = document.createElement('article');
+          el.className = 'archive-article';
+          el.id = article.id;
+          el.innerHTML = `
+            <div class="article-type-label">${escape(article.type)}</div>
+            <h2 class="article-title">${escape(article.title)}</h2>
+            <p class="article-dek">${escape(article.dek)}</p>
+            ${buildTelemetry(article)}
+            ${buildSections(article.sections)}
+          `;
+          if (editMode) addEditTrigger(el, article);
+          journal.appendChild(el);
+        });
+      }
+    }
+
+    async function render() {
+      const res = await fetch('./data/content.json?v=' + Date.now());
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      editMode = isEditMode();
+      if (editMode) {
+        draftData = loadLocalDraft() || JSON.parse(JSON.stringify(data));
+        renderDraftBanner();
+        renderPage(draftData);
+      } else {
+        renderPage(data);
+      }
     }
 
     render().catch(err => {
-      document.getElementById('eras').innerHTML =
-        '<p class="loading">failed to load content: ' + err.message + '</p>';
+      document.getElementById('journal-content').innerHTML =
+        `<p class="loading">failed to load: ${err.message}</p>`;
     });
   </script>
 </body>
