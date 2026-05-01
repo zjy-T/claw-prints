@@ -6,284 +6,1529 @@
   <title>Claw Prints</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Reset & Base ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0d0d0d;
-      --surface:  #141414;
-      --border:   #1f1f1f;
-      --text:     #c8c8c8;
-      --muted:    #555;
-      --accent:   #c9a84c;
-      --accent-dim: #8a6e2e;
-      --font:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --bg: #FDFDFD;
+      --surface: #FFFFFF;
+      --surface-soft: #f8fafc;
+      --border: #e2e8f0;
+      --border-mid: #cbd5e1;
+      --text: #1e293b;
+      --heading: #020617;
+      --muted: #64748b;
+      --muted-plus: #334155;
+      --accent: #8a6e2e;
+      --accent-soft: rgba(138, 110, 46, 0.1);
+      --accent-dim: #6b5322;
+      --status-pub: #166534;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
+      --font-prose: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --page: 1180px;
+      --col: 760px;
+      --pad: 1.5rem;
+      --topbar: 72px;
     }
 
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
+      font-family: var(--font-prose);
+      font-size: 17px;
       line-height: 1.75;
       min-height: 100vh;
-      /* subtle noise texture */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      text-rendering: optimizeLegibility;
     }
 
-    /* ─── Layout ─── */
+    img { max-width: 100%; display: block; }
+    button, input, select, textarea { font: inherit; }
+    a { color: inherit; }
+
     .container {
-      max-width: 720px;
+      width: min(var(--page), calc(100vw - 2 * var(--pad)));
       margin: 0 auto;
-      padding: 0 2rem;
     }
 
-    /* ─── Header / Hero ─── */
-    header {
-      padding: 7rem 0 5rem;
-      border-bottom: 1px solid var(--border);
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background: rgba(253, 253, 253, 0.92);
+      border-bottom: 1px solid rgba(203, 213, 225, 0.85);
     }
 
-    .site-label {
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-
-    h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-    }
-
-    .tagline {
-      font-size: 15px;
-      color: var(--text);
-      max-width: 540px;
-      margin-bottom: 1rem;
-      font-style: italic;
-      font-weight: 300;
-    }
-
-    .smallprint {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* ─── Era Sections ─── */
-    .eras {
-      padding: 4rem 0;
-    }
-
-    .era {
-      padding: 3.5rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .era:last-child {
-      border-bottom: none;
-    }
-
-    .era-meta {
+    .topbar-inner {
+      height: var(--topbar);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 1rem;
-      margin-bottom: 1.5rem;
     }
 
-    .era-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
+    .brand {
+      border: none;
+      background: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      cursor: pointer;
+      text-align: left;
+      color: var(--heading);
     }
 
-    .era-period {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-    }
-
-    .era-period::before {
-      content: '//';
-      margin-right: 0.5rem;
-      color: var(--border);
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: -0.01em;
-      margin-bottom: 1rem;
-    }
-
-    .era-summary {
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-      font-weight: 300;
-    }
-
-    .lessons {
-      list-style: none;
-      border-left: 2px solid var(--accent-dim);
-      padding-left: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .lessons li {
-      font-size: 13px;
-      color: var(--muted);
-      padding: 0.2rem 0;
-      position: relative;
-    }
-
-    .lessons li::before {
-      content: '→';
-      position: absolute;
-      left: -1.25rem;
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border-mid);
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      display: grid;
+      place-items: center;
+      font-family: var(--font-prose);
+      font-size: 1.05rem;
       color: var(--accent-dim);
-      font-size: 11px;
-      top: 0.25rem;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
     }
 
-    .era-link {
-      display: inline-block;
-      font-size: 12px;
-      letter-spacing: 0.1em;
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-name {
+      font-family: var(--font-prose);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent-dim);
-      padding: 0.4rem 0.9rem;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .era-link:hover {
-      background: var(--accent);
-      color: var(--bg);
-    }
-
-    /* ─── Footer ─── */
-    footer {
-      padding: 3rem 0 5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-text {
-      font-size: 12px;
       color: var(--muted);
-      margin-bottom: 0.75rem;
+      margin-top: 0.18rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-pill,
+    .filter-pill,
+    .tag-pill,
+    .cta-link,
+    .back-link,
+    .toc-link,
+    .edit-trigger,
+    .editor-close,
+    .editor-apply,
+    .draft-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted-plus);
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+      box-shadow: 0 1px 0 rgba(148, 163, 184, 0.08);
+    }
+
+    .nav-pill,
+    .cta-link,
+    .back-link,
+    .toc-link,
+    .edit-trigger,
+    .editor-close,
+    .editor-apply,
+    .draft-btn {
+      font-family: var(--font-ui);
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.62rem 0.9rem;
+    }
+
+    .filter-pill,
+    .tag-pill {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 0.5rem 0.82rem;
+      text-transform: uppercase;
+    }
+
+    .nav-pill:hover,
+    .filter-pill:hover,
+    .tag-pill:hover,
+    .cta-link:hover,
+    .back-link:hover,
+    .toc-link:hover,
+    .edit-trigger:hover,
+    .editor-close:hover,
+    .editor-apply:hover,
+    .draft-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--border-mid);
+      color: var(--heading);
+    }
+
+    .filter-pill.is-active,
+    .tag-pill.is-active,
+    .editor-apply,
+    .draft-btn.primary {
+      background: var(--heading);
+      color: var(--surface);
+      border-color: var(--heading);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .hero {
+      padding: 3.4rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(250px, 0.9fr);
+      gap: 2rem;
+      align-items: end;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .meta-kicker {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+    }
+
+    .hero-title {
+      font-family: var(--font-prose);
+      font-size: clamp(2.7rem, 7vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: var(--heading);
+      margin: 1rem 0 1rem;
+      max-width: 11ch;
+    }
+
+    .hero-copy {
+      max-width: 54ch;
+      color: var(--muted-plus);
+      font-size: 1.04rem;
+    }
+
+    .hero-note {
+      padding: 1.2rem 1.3rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(180deg, var(--surface), var(--surface-soft));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-note p {
+      margin-top: 0.8rem;
+      color: var(--muted-plus);
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    .hero-quicklinks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.5rem;
+    }
+
+    .hero-quicklinks a {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--muted-plus);
+      padding-bottom: 0.18rem;
+      border-bottom: 1px solid transparent;
+    }
+
+    .hero-quicklinks a:hover { border-color: var(--accent); color: var(--heading); }
+
+    main {
+      padding: 2.3rem 0 4.4rem;
+    }
+
+    .home-layout,
+    .article-layout {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .home-layout { grid-template-columns: minmax(0, 1fr); }
+
+    .discovery-toolbar {
+      position: sticky;
+      top: calc(var(--topbar) + 0.85rem);
+      z-index: 20;
+      display: grid;
+      gap: 1rem;
+      padding: 1.1rem 1.15rem;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .toolbar-label {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 88px;
+    }
+
+    .home-sections { display: grid; gap: 1.6rem; }
+
+    .featured-card,
+    .story-card,
+    .article-shell,
+    .gallery-card,
+    .editor-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .featured-card {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    }
+
+    .featured-copy,
+    .story-copy {
+      padding: 1.7rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .story-card {
+      overflow: hidden;
+      display: grid;
+      min-height: 100%;
+    }
+
+    .story-card-media,
+    .featured-media,
+    .article-hero-media,
+    .gallery-media {
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .featured-media,
+    .article-hero-media {
+      min-height: 100%;
+      display: grid;
+    }
+
+    .story-card-media img,
+    .featured-media img,
+    .article-hero-media img,
+    .gallery-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-meta,
+    .article-meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 0.9rem;
+    }
+
+    .kind-chip,
+    .format-chip,
+    .tag-chip,
+    .small-tag {
+      font-family: var(--font-ui);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.56rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted-plus);
+      background: var(--surface-soft);
+    }
+
+    .kind-chip { border-color: rgba(138, 110, 46, 0.28); color: var(--accent-dim); background: var(--accent-soft); }
+    .kind-chip.product-build { color: #1d4ed8; border-color: rgba(59, 130, 246, 0.24); background: rgba(59, 130, 246, 0.08); }
+    .kind-chip.infra-build { color: #166534; border-color: rgba(22, 101, 52, 0.22); background: rgba(22, 101, 52, 0.08); }
+
+    .card-title,
+    .article-title {
+      font-family: var(--font-prose);
+      color: var(--heading);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .card-title { font-size: clamp(1.7rem, 4vw, 2.5rem); margin-bottom: 0.85rem; }
+    .story-card .card-title { font-size: 1.65rem; }
+    .article-title { font-size: clamp(2.2rem, 4.2vw, 3.8rem); margin: 0.8rem 0 0.9rem; }
+
+    .card-dek,
+    .article-dek,
+    .card-summary,
+    .article-summary,
+    .article-body p,
+    .article-quote p,
+    .gallery-caption,
+    .image-caption,
+    .loading,
+    .empty-state {
+      color: var(--muted-plus);
+    }
+
+    .card-dek,
+    .article-dek {
+      font-size: 1.03rem;
+      line-height: 1.6;
+      max-width: 46ch;
+    }
+
+    .card-summary,
+    .article-summary {
+      margin-top: 1rem;
+      font-size: 0.98rem;
+      line-height: 1.72;
+      max-width: 58ch;
+    }
+
+    .card-tags,
+    .article-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+
+    .telemetry {
+      margin-top: 1.05rem;
+      font-family: var(--font-ui);
+      font-size: 0.76rem;
+      letter-spacing: 0.03em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.7rem;
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface), var(--surface-soft));
+      color: var(--muted-plus);
+    }
+
+    .telemetry strong {
+      color: var(--heading);
+      font-weight: 600;
+    }
+
+    .telemetry-sep {
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 1.25rem;
+    }
+
+    .cta-link.primary {
+      background: var(--heading);
+      color: var(--surface);
+      border-color: var(--heading);
+    }
+
+    .cta-link.inline-link {
+      border: none;
+      box-shadow: none;
+      background: none;
+      padding-left: 0;
+      color: var(--accent-dim);
+    }
+
+    .cta-link.inline-link:hover { color: var(--heading); }
+
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .article-nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+
+    .article-shell {
+      overflow: hidden;
+      padding: 1.55rem;
+    }
+
+    .article-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: 1.4rem;
+      align-items: start;
+    }
+
+    .article-side {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .toc-card {
+      position: sticky;
+      top: calc(var(--topbar) + 1rem);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--surface-soft);
+      padding: 1rem;
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .gallery-card {
+      overflow: hidden;
+    }
+
+    .gallery-copy {
+      padding: 0.9rem 1rem 1rem;
+    }
+
+    .gallery-caption,
+    .image-caption {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .article-body {
+      width: min(100%, var(--col));
+      margin-top: 2rem;
+      display: grid;
+      gap: 1.6rem;
+    }
+
+    .section-block {
+      scroll-margin-top: calc(var(--topbar) + 1.1rem);
+      background: transparent;
+    }
+
+    .section-heading {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 0.8rem;
+    }
+
+    .article-body p {
+      margin-bottom: 0.95rem;
+      font-size: 1.03rem;
+      line-height: 1.82;
+    }
+
+    .article-body p:last-child { margin-bottom: 0; }
+
+    .article-image,
+    .article-quote,
+    .lessons-panel,
+    .checklist-panel {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .article-image img { width: 100%; }
+    .image-caption { padding: 0.95rem 1rem; border-top: 1px solid var(--border); }
+
+    .article-quote {
+      padding: 1.4rem 1.5rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .article-quote p {
+      font-size: 1.24rem;
+      color: var(--heading);
+      line-height: 1.55;
+      font-style: italic;
+      margin-bottom: 0.6rem;
+    }
+
+    .article-quote cite {
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .lessons-panel,
+    .checklist-panel {
+      padding: 1.25rem 1.3rem;
+    }
+
+    .lessons-panel ul,
+    .checklist-panel ul {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.55rem;
+    }
+
+    .lessons-panel li,
+    .checklist-panel li {
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--muted-plus);
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 0.7rem;
+      align-items: start;
+    }
+
+    .lessons-panel li::before,
+    .checklist-panel li::before {
+      color: var(--accent-dim);
+      font-size: 0.82rem;
+      transform: translateY(0.25rem);
+    }
+
+    .lessons-panel li::before { content: '→'; }
+    .checklist-panel li::before { content: '✓'; }
+
+    .empty-state,
+    .loading {
+      border: 1px dashed var(--border-mid);
+      border-radius: 22px;
+      padding: 2rem;
+      text-align: center;
+      font-family: var(--font-ui);
+      background: var(--surface);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.4rem 0 3.4rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      color: var(--muted);
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
     }
 
     .footer-link {
-      font-size: 12px;
       color: var(--accent-dim);
       text-decoration: none;
-      letter-spacing: 0.05em;
+      font-weight: 500;
     }
 
-    .footer-link:hover {
-      color: var(--accent);
+    #draft-banner {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(2, 6, 23, 0.98);
+      color: #f8fafc;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.18);
     }
 
-    /* ─── Loading state ─── */
-    .loading {
+    .draft-banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      flex-wrap: wrap;
+    }
+
+    .draft-banner-copy {
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .draft-banner-label {
+      font-family: var(--font-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .draft-banner-desc {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: rgba(241, 245, 249, 0.88);
+    }
+
+    .draft-banner-actions { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+    .draft-btn { background: transparent; color: #f8fafc; border-color: rgba(226, 232, 240, 0.25); }
+    .draft-btn.primary { background: #f8fafc; color: #020617; border-color: #f8fafc; }
+
+    .edit-trigger {
+      margin-top: 1rem;
+      background: var(--surface-soft);
+    }
+
+    .editor-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      display: none;
+      align-items: stretch;
+      justify-content: flex-end;
+      z-index: 70;
+    }
+
+    .editor-overlay.open { display: flex; }
+
+    .editor-panel {
+      width: min(540px, 100vw);
+      height: 100%;
+      overflow: auto;
+      padding: 1.4rem;
+      border-radius: 0;
+      border-left: 1px solid var(--border);
+      display: grid;
+      align-content: start;
+      gap: 1rem;
+    }
+
+    .editor-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .editor-title {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+    }
+
+    .field { display: grid; gap: 0.38rem; }
+    .field label {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--muted);
-      font-size: 13px;
-      padding: 4rem 0;
-      font-style: italic;
     }
 
-    /* ─── Scrollbar ─── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--border-mid);
+      border-radius: 14px;
+      padding: 0.8rem 0.9rem;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .field textarea { min-height: 96px; }
+    .field textarea.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .section-editor {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      display: grid;
+      gap: 0.8rem;
+      background: var(--surface-soft);
+    }
+
+    .section-editor-type {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .featured-card,
+      .article-intro {
+        grid-template-columns: 1fr;
+      }
+
+      .toc-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 720px) {
+      :root { --pad: 1rem; --topbar: 64px; }
+      .hero { padding-top: 2.35rem; }
+      .hero-title { max-width: none; }
+      .topbar-inner { align-items: center; }
+      .topbar-actions { gap: 0.45rem; }
+      .toolbar-label { min-width: unset; width: 100%; }
+      .article-shell { padding: 1.1rem; }
+      .featured-copy, .story-copy { padding: 1.2rem; }
+      .hero-note { padding: 1rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header id="hero">
-      <div class="site-label">Field Log</div>
-      <h1 id="site-name">Claw Prints</h1>
-      <p class="tagline" id="tagline"></p>
-      <p class="smallprint" id="smallprint"></p>
-    </header>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <button class="brand" id="brand-link" type="button" aria-label="Go to Claw Prints home">
+        <span class="brand-mark">CP</span>
+        <span class="brand-text">
+          <span class="brand-name">Claw Prints</span>
+          <span class="brand-sub">The Depth field log</span>
+        </span>
+      </button>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </div>
+  </header>
 
-    <main class="eras" id="eras">
-      <p class="loading">loading field notes...</p>
-    </main>
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Editorial journal · V2.1</div>
+        <h1 class="hero-title" id="hero-title">Claw Prints</h1>
+        <p class="hero-copy" id="hero-copy"></p>
+        <div class="hero-quicklinks" id="hero-quicklinks"></div>
+      </div>
+      <aside class="hero-note">
+        <div class="meta-kicker">Reader mode</div>
+        <p id="hero-note-copy">Shorter summaries on the front page. Deeper stories, jump tools, and supporting artifacts once you enter an article.</p>
+      </aside>
+    </div>
+  </header>
 
-    <footer>
-      <p class="footer-text" id="footer-text"></p>
-      <a class="footer-link" id="footer-link" href="#" target="_blank" rel="noopener"></a>
-    </footer>
-  </div>
+  <main>
+    <div class="container">
+      <div id="app" class="loading">Loading the field log…</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <span id="footer-text"></span>
+      <a id="footer-link" class="footer-link" href="#" target="_blank" rel="noopener">↗ Agent Dashboard</a>
+    </div>
+  </footer>
+
+  <div class="editor-overlay" id="editor-overlay" aria-hidden="true"></div>
 
   <script>
-    async function render() {
-      const res = await fetch('./data/content.json?v=' + Date.now());
-      const data = await res.json();
+    const DRAFT_KEY = 'clawprints_draft';
+    let sourceData = null;
+    let draftData = null;
+    let editMode = false;
+    const filters = { kind: 'all', tag: 'all' };
 
-      // Hero
-      document.getElementById('site-name').textContent = data.site.name;
-      document.getElementById('tagline').textContent = data.site.tagline;
-      document.getElementById('smallprint').textContent = data.site.smallprint;
+    const $ = sel => document.querySelector(sel);
 
-      // Footer
-      document.getElementById('footer-text').textContent = data.footer.text;
-      const fl = document.getElementById('footer-link');
-      fl.href = data.footer.dashboardUrl;
-      fl.textContent = '↗ Agent Dashboard';
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-      // Eras
-      const container = document.getElementById('eras');
-      container.innerHTML = '';
+    function isEditMode() {
+      const h = location.hostname;
+      const local = h === 'localhost' || h === '127.0.0.1' || location.protocol === 'file:';
+      return local && new URLSearchParams(location.search).get('edit') === '1';
+    }
 
-      data.eras.forEach((era, i) => {
-        const section = document.createElement('section');
-        section.className = 'era';
-        section.id = era.id;
+    function loadLocalDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
 
-        const meta = `
-          <div class="era-meta">
-            <span class="era-label">Era ${String(i + 1).padStart(2, '0')}</span>
-            <span class="era-period">${era.period}</span>
-          </div>`;
+    function exportDraftAsJson(data) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'content-draft.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
 
-        const lessons = era.lessons.map(l => `<li>${l}</li>`).join('');
+    function renderDraftBanner() {
+      if (document.getElementById('draft-banner')) return;
+      const banner = document.createElement('div');
+      banner.id = 'draft-banner';
+      banner.innerHTML = `
+        <div class="container draft-banner-inner">
+          <div class="draft-banner-copy">
+            <span class="draft-banner-label">Draft Preview</span>
+            <span class="draft-banner-desc">Edit mode is local-only. Save, reset, or export before publishing anything.</span>
+          </div>
+          <div class="draft-banner-actions">
+            <button class="draft-btn primary" id="btn-save-draft" type="button">Save Draft</button>
+            <button class="draft-btn" id="btn-reset-draft" type="button">Reset Draft</button>
+            <button class="draft-btn" id="btn-export-draft" type="button">Export Draft</button>
+          </div>
+        </div>`;
+      document.body.insertAdjacentElement('afterbegin', banner);
 
-        const link = era.link
-          ? `<a class="era-link" href="${era.link.url}" target="_blank" rel="noopener">${era.link.label} ↗</a>`
-          : '';
+      $('#btn-save-draft').addEventListener('click', () => {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData, null, 2));
+        const btn = $('#btn-save-draft');
+        btn.textContent = 'Saved ✓';
+        setTimeout(() => { btn.textContent = 'Save Draft'; }, 1400);
+      });
 
-        section.innerHTML = `
-          ${meta}
-          <h2>${era.title}</h2>
-          <p class="era-summary">${era.summary}</p>
-          <ul class="lessons">${lessons}</ul>
-          ${link}
-        `;
+      $('#btn-reset-draft').addEventListener('click', () => {
+        if (!confirm('Reset local draft changes and restore the original content.json?')) return;
+        localStorage.removeItem(DRAFT_KEY);
+        draftData = JSON.parse(JSON.stringify(sourceData));
+        renderApp();
+      });
 
-        container.appendChild(section);
+      $('#btn-export-draft').addEventListener('click', () => exportDraftAsJson(draftData));
+    }
+
+    function currentData() {
+      return editMode ? draftData : sourceData;
+    }
+
+    function formatDate(iso) {
+      const date = new Date(iso + 'T00:00:00');
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function dayLabel(days) {
+      const safe = Math.max(1, Number(days || 1));
+      return `${safe} day${safe === 1 ? '' : 's'}`;
+    }
+
+    function readTimeFor(article) {
+      const explicit = article.telemetry?.readTimeMinutes;
+      if (explicit) return explicit;
+      const words = [article.dek, article.summary, ...(article.sections || []).map(s => s.content || '')]
+        .join(' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
+      return Math.max(2, Math.round(words / 220));
+    }
+
+    function telemetryHtml(article) {
+      const bits = [
+        `<span><strong>${escapeHtml(formatDate(article.publishDate))}</strong></span>`,
+        `<span class="telemetry-sep">·</span>`,
+        `<span>${escapeHtml(readTimeFor(article))} min read</span>`,
+        `<span class="telemetry-sep">·</span>`,
+        `<span>${escapeHtml(dayLabel(article.telemetry?.buildDays))} build</span>`,
+        `<span class="telemetry-sep">·</span>`,
+        `<span>${escapeHtml(article.status)}</span>`
+      ];
+      if (article.updatedAt && article.updatedAt !== article.publishDate) {
+        bits.push(`<span class="telemetry-sep">·</span>`, `<span>updated ${escapeHtml(formatDate(article.updatedAt))}</span>`);
+      }
+      return `<div class="telemetry">${bits.join('')}</div>`;
+    }
+
+    function tagHtml(tags, active = false) {
+      return (tags || []).map(tag => `<span class="small-tag${active ? ' is-active' : ''}">${escapeHtml(tag)}</span>`).join('');
+    }
+
+    function kindLabel(kind) {
+      return kind === 'product-build' ? 'Product Build' : 'Infra Build';
+    }
+
+    function getRouteArticleSlug() {
+      return new URLSearchParams(location.search).get('article');
+    }
+
+    function buildUrl(articleSlug = null) {
+      const url = new URL(location.href);
+      if (articleSlug) url.searchParams.set('article', articleSlug);
+      else url.searchParams.delete('article');
+      if (editMode) url.searchParams.set('edit', '1');
+      return url.pathname + url.search + url.hash;
+    }
+
+    function goHome() {
+      history.pushState({}, '', buildUrl(null));
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goArticle(slug) {
+      history.pushState({}, '', buildUrl(slug));
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function articleBySlug(slug) {
+      return currentData().articles.find(article => article.slug === slug) || null;
+    }
+
+    function allTags(articles) {
+      return [...new Set(articles.flatMap(article => article.tags || []))].sort((a, b) => a.localeCompare(b));
+    }
+
+    function filteredArticles(articles) {
+      return articles.filter(article => {
+        const kindOk = filters.kind === 'all' || article.kind === filters.kind;
+        const tagOk = filters.tag === 'all' || (article.tags || []).includes(filters.tag);
+        return kindOk && tagOk;
       });
     }
 
+    function setKind(kind) {
+      filters.kind = kind;
+      renderApp();
+    }
+
+    function setTag(tag) {
+      filters.tag = tag;
+      renderApp();
+    }
+
+    function renderTopbar(articleSlug) {
+      const actions = $('#topbar-actions');
+      const latest = [...currentData().articles].sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))[0];
+      actions.innerHTML = `
+        <button class="nav-pill" type="button" id="nav-home">Home</button>
+        ${latest ? `<button class="nav-pill" type="button" id="nav-latest">Latest story</button>` : ''}
+        ${articleSlug ? '<button class="nav-pill" type="button" id="nav-browse">Browse stories</button>' : ''}
+      `;
+      $('#nav-home').addEventListener('click', goHome);
+      $('#brand-link').onclick = goHome;
+      if (latest && $('#nav-latest')) $('#nav-latest').addEventListener('click', () => goArticle(latest.slug));
+      if (articleSlug && $('#nav-browse')) $('#nav-browse').addEventListener('click', goHome);
+    }
+
+    function renderHero(articleSlug) {
+      const data = currentData();
+      $('#hero-title').textContent = data.site.name;
+      $('#footer-text').textContent = data.footer.text;
+      const footerLink = $('#footer-link');
+      footerLink.href = data.footer.dashboardUrl;
+      footerLink.textContent = '↗ Agent Dashboard';
+
+      const quicklinks = $('#hero-quicklinks');
+      if (articleSlug) {
+        const article = articleBySlug(articleSlug);
+        $('#hero-copy').textContent = article ? article.summary : data.site.tagline;
+        $('#hero-note-copy').textContent = article
+          ? 'Article view stays focused: jump links, supporting media, and no full-feed clutter.'
+          : 'Shorter summaries on the front page. Deeper stories, jump tools, and supporting artifacts once you enter an article.';
+        quicklinks.innerHTML = article
+          ? `<a href="${buildUrl(null)}">Back to index</a><a href="#article-body">Jump to story</a><a href="#article-gallery">Jump to artifacts</a>`
+          : '';
+      } else {
+        $('#hero-copy').textContent = data.site.tagline;
+        $('#hero-note-copy').textContent = 'Shorter summaries on the front page. Deeper stories, jump tools, and supporting artifacts once you enter an article.';
+        quicklinks.innerHTML = '<a href="#discovery-toolbar">Filter builds</a><a href="#featured-story">Read the latest</a><a href="#story-grid">Browse the archive</a>';
+      }
+    }
+
+    function buildCard(article, featured = false) {
+      const wrapperClass = featured ? 'featured-card reveal' : 'story-card reveal';
+      const image = article.coverImage ? `
+        <div class="${featured ? 'featured-media' : 'story-card-media'}">
+          <img src="${escapeHtml(article.coverImage.src)}" alt="${escapeHtml(article.coverImage.alt || article.title)}">
+        </div>` : '';
+      const links = article.links?.map(link =>
+        `<a class="cta-link inline-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener">${escapeHtml(link.label)} ↗</a>`
+      ).join('') || '';
+      return `
+        <article class="${wrapperClass}" ${featured ? 'id="featured-story"' : ''}>
+          <div class="${featured ? 'featured-copy' : 'story-copy'}">
+            <div class="card-meta">
+              <span class="kind-chip ${escapeHtml(article.kind)}">${escapeHtml(kindLabel(article.kind))}</span>
+              <span class="format-chip">${escapeHtml(article.type)}</span>
+            </div>
+            <h2 class="card-title">${escapeHtml(article.title)}</h2>
+            <p class="card-dek">${escapeHtml(article.dek)}</p>
+            ${telemetryHtml(article)}
+            <p class="card-summary">${escapeHtml(article.summary)}</p>
+            <div class="card-tags">${tagHtml(article.tags)}</div>
+            <div class="cta-row">
+              <button class="cta-link primary" type="button" data-open-article="${escapeHtml(article.slug)}">Open article</button>
+              ${links}
+            </div>
+            ${editMode ? `<button class="edit-trigger" type="button" data-edit-article="${escapeHtml(article.slug)}">Edit article</button>` : ''}
+          </div>
+          ${image}
+        </article>`;
+    }
+
+    function buildDiscoveryToolbar(articles) {
+      const tags = allTags(articles);
+      return `
+        <section class="discovery-toolbar" id="discovery-toolbar">
+          <div class="toolbar-row">
+            <span class="toolbar-label">Build type</span>
+            <button class="filter-pill${filters.kind === 'all' ? ' is-active' : ''}" type="button" data-kind="all">All</button>
+            <button class="filter-pill${filters.kind === 'product-build' ? ' is-active' : ''}" type="button" data-kind="product-build">Product</button>
+            <button class="filter-pill${filters.kind === 'infra-build' ? ' is-active' : ''}" type="button" data-kind="infra-build">Infra</button>
+          </div>
+          <div class="toolbar-row">
+            <span class="toolbar-label">Topics</span>
+            <button class="tag-pill${filters.tag === 'all' ? ' is-active' : ''}" type="button" data-tag="all">All topics</button>
+            ${tags.map(tag => `<button class="tag-pill${filters.tag === tag ? ' is-active' : ''}" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join('')}
+          </div>
+        </section>`;
+    }
+
+    function renderHome(articles) {
+      const sorted = [...articles].sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+      const featured = sorted[0];
+      const others = sorted.slice(1);
+      const visible = filteredArticles(sorted);
+      const visibleFeatured = visible.find(a => a.slug === featured?.slug) ? featured : visible[0];
+      const visibleOthers = visible.filter(a => a.slug !== visibleFeatured?.slug);
+
+      if (!visibleFeatured) {
+        return `
+          <div class="home-layout">
+            ${buildDiscoveryToolbar(sorted)}
+            <div class="empty-state">No stories match that filter yet. Try a broader build type or clear the topic chip.</div>
+          </div>`;
+      }
+
+      return `
+        <div class="home-layout">
+          ${buildDiscoveryToolbar(sorted)}
+          <div class="home-sections">
+            ${buildCard(visibleFeatured, true)}
+            <section id="story-grid" class="story-grid">
+              ${visibleOthers.map(article => buildCard(article)).join('') || '<div class="empty-state">Only the featured story matches the current filters.</div>'}
+            </section>
+          </div>
+        </div>`;
+    }
+
+    function buildGallery(images) {
+      if (!images?.length) return '';
+      return `
+        <section class="gallery-grid reveal" id="article-gallery">
+          ${images.map(image => `
+            <figure class="gallery-card">
+              <div class="gallery-media"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || '')}"></div>
+              <figcaption class="gallery-copy gallery-caption">${escapeHtml(image.caption || '')}</figcaption>
+            </figure>`).join('')}
+        </section>`;
+    }
+
+    function buildSection(section) {
+      const heading = section.heading ? `<div class="section-heading">${escapeHtml(section.heading)}</div>` : '';
+      const idAttr = section.id ? ` id="${escapeHtml(section.id)}"` : '';
+
+      if (section.type === 'prose') {
+        const paragraphs = String(section.content || '')
+          .split(/\n\n+/)
+          .map(chunk => chunk.trim())
+          .filter(Boolean)
+          .map(chunk => `<p>${escapeHtml(chunk)}</p>`)
+          .join('');
+        return `<section class="section-block reveal"${idAttr}>${heading}<div class="article-body-copy">${paragraphs}</div></section>`;
+      }
+
+      if (section.type === 'image') {
+        const image = section.image || {};
+        return `
+          <figure class="section-block article-image reveal"${idAttr}>
+            ${heading}
+            <img src="${escapeHtml(image.src || '')}" alt="${escapeHtml(image.alt || '')}">
+            <figcaption class="image-caption">${escapeHtml(image.caption || '')}</figcaption>
+          </figure>`;
+      }
+
+      if (section.type === 'quote') {
+        return `
+          <blockquote class="section-block article-quote reveal"${idAttr}>
+            ${heading}
+            <p>${escapeHtml(section.text || '')}</p>
+            ${section.attribution ? `<cite>— ${escapeHtml(section.attribution)}</cite>` : ''}
+          </blockquote>`;
+      }
+
+      if (section.type === 'lessons') {
+        return `
+          <section class="section-block lessons-panel reveal"${idAttr}>
+            ${heading}
+            <ul>${(section.items || []).map(item => `<li><span>${escapeHtml(item)}</span></li>`).join('')}</ul>
+          </section>`;
+      }
+
+      if (section.type === 'checklist') {
+        return `
+          <section class="section-block checklist-panel reveal"${idAttr}>
+            ${heading}
+            <ul>${(section.items || []).map(item => `<li><span>${escapeHtml(item.text || item)}</span></li>`).join('')}</ul>
+          </section>`;
+      }
+
+      return '';
+    }
+
+    function buildArticleView(article) {
+      const jumpLinks = article.jumpLinks?.length
+        ? article.jumpLinks
+        : (article.sections || [])
+            .filter(section => section.id && section.heading)
+            .map(section => ({ id: section.id, label: section.heading }));
+
+      const links = article.links?.map(link =>
+        `<a class="cta-link inline-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener">${escapeHtml(link.label)} ↗</a>`
+      ).join('') || '';
+
+      return `
+        <div class="article-layout">
+          <div class="article-nav-row">
+            <button class="back-link" type="button" id="back-home">Back to index</button>
+            ${editMode ? `<button class="edit-trigger" type="button" data-edit-article="${escapeHtml(article.slug)}">Edit article</button>` : ''}
+          </div>
+          <article class="article-shell">
+            <div class="article-intro">
+              <div>
+                <div class="article-meta">
+                  <span class="kind-chip ${escapeHtml(article.kind)}">${escapeHtml(kindLabel(article.kind))}</span>
+                  <span class="format-chip">${escapeHtml(article.type)}</span>
+                </div>
+                <h1 class="article-title">${escapeHtml(article.title)}</h1>
+                <p class="article-dek">${escapeHtml(article.dek)}</p>
+                ${telemetryHtml(article)}
+                <p class="article-summary">${escapeHtml(article.summary)}</p>
+                <div class="article-tags">${tagHtml(article.tags)}</div>
+                <div class="cta-row">${links}</div>
+              </div>
+              <div class="article-side">
+                ${article.coverImage ? `<figure class="article-hero-media"><img src="${escapeHtml(article.coverImage.src)}" alt="${escapeHtml(article.coverImage.alt || article.title)}"></figure><div class="gallery-caption">${escapeHtml(article.coverImage.caption || '')}</div>` : ''}
+                <nav class="toc-card">
+                  <div class="section-kicker">Jump tools</div>
+                  <div class="toc-links">
+                    ${jumpLinks.map(link => `<a class="toc-link" href="#${escapeHtml(link.id)}">${escapeHtml(link.label)}</a>`).join('')}
+                  </div>
+                </nav>
+              </div>
+            </div>
+            ${buildGallery(article.gallery)}
+            <div class="article-body" id="article-body">
+              ${(article.sections || []).map(buildSection).join('')}
+            </div>
+          </article>
+        </div>`;
+    }
+
+    function openEditor(slug) {
+      if (!editMode) return;
+      const article = articleBySlug(slug);
+      if (!article) return;
+      const overlay = $('#editor-overlay');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      overlay.innerHTML = `
+        <div class="editor-panel">
+          <div class="editor-head">
+            <div class="editor-title">Editing · ${escapeHtml(article.title)}</div>
+            <button class="editor-close" type="button" id="editor-close">Close</button>
+          </div>
+          <div class="field">
+            <label>Title</label>
+            <input id="editor-title" value="${escapeHtml(article.title)}">
+          </div>
+          <div class="field">
+            <label>Dek</label>
+            <textarea id="editor-dek">${escapeHtml(article.dek)}</textarea>
+          </div>
+          <div class="field">
+            <label>Summary</label>
+            <textarea id="editor-summary">${escapeHtml(article.summary)}</textarea>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="editor-status">
+              <option value="published"${article.status === 'published' ? ' selected' : ''}>published</option>
+              <option value="draft"${article.status === 'draft' ? ' selected' : ''}>draft</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Kind</label>
+            <select id="editor-kind">
+              <option value="product-build"${article.kind === 'product-build' ? ' selected' : ''}>product-build</option>
+              <option value="infra-build"${article.kind === 'infra-build' ? ' selected' : ''}>infra-build</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Tags (comma separated)</label>
+            <input id="editor-tags" value="${escapeHtml((article.tags || []).join(', '))}">
+          </div>
+          <div class="field">
+            <label>Build duration in days</label>
+            <input id="editor-days" type="number" min="1" value="${escapeHtml(article.telemetry?.buildDays || 1)}">
+          </div>
+          ${(article.sections || []).map((section, idx) => sectionEditor(section, idx)).join('')}
+          <button class="editor-apply" type="button" id="editor-apply">Apply draft changes</button>
+        </div>`;
+
+      $('#editor-close').addEventListener('click', closeEditor);
+      overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeEditor();
+      });
+      $('#editor-apply').addEventListener('click', () => applyEditor(slug));
+    }
+
+    function sectionEditor(section, idx) {
+      if (section.type === 'prose') {
+        return `
+          <div class="section-editor">
+            <div class="section-editor-type">Prose · section ${idx + 1}</div>
+            <div class="field"><label>Heading</label><input data-section="${idx}" data-field="heading" value="${escapeHtml(section.heading || '')}"></div>
+            <div class="field"><label>Content</label><textarea data-section="${idx}" data-field="content">${escapeHtml(section.content || '')}</textarea></div>
+          </div>`;
+      }
+
+      if (section.type === 'image') {
+        return `
+          <div class="section-editor">
+            <div class="section-editor-type">Image · section ${idx + 1}</div>
+            <div class="field"><label>Caption</label><textarea data-section="${idx}" data-field="image.caption">${escapeHtml(section.image?.caption || '')}</textarea></div>
+            <div class="field"><label>Image source</label><input data-section="${idx}" data-field="image.src" value="${escapeHtml(section.image?.src || '')}"></div>
+          </div>`;
+      }
+
+      if (section.type === 'quote') {
+        return `
+          <div class="section-editor">
+            <div class="section-editor-type">Quote · section ${idx + 1}</div>
+            <div class="field"><label>Text</label><textarea data-section="${idx}" data-field="text">${escapeHtml(section.text || '')}</textarea></div>
+            <div class="field"><label>Attribution</label><input data-section="${idx}" data-field="attribution" value="${escapeHtml(section.attribution || '')}"></div>
+          </div>`;
+      }
+
+      return `
+        <div class="section-editor">
+          <div class="section-editor-type">${escapeHtml(section.type)} · section ${idx + 1}</div>
+          <div class="field"><label>Items (one per line)</label><textarea class="mono" data-section="${idx}" data-field="items">${escapeHtml((section.items || []).map(item => typeof item === 'string' ? item : item.text).join('\n'))}</textarea></div>
+        </div>`;
+    }
+
+    function closeEditor() {
+      const overlay = $('#editor-overlay');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.innerHTML = '';
+    }
+
+    function applyEditor(slug) {
+      const articleIndex = draftData.articles.findIndex(article => article.slug === slug);
+      if (articleIndex === -1) return;
+      const article = JSON.parse(JSON.stringify(draftData.articles[articleIndex]));
+      article.title = $('#editor-title').value.trim();
+      article.dek = $('#editor-dek').value.trim();
+      article.summary = $('#editor-summary').value.trim();
+      article.status = $('#editor-status').value;
+      article.kind = $('#editor-kind').value;
+      article.tags = $('#editor-tags').value.split(',').map(tag => tag.trim()).filter(Boolean);
+      article.telemetry = article.telemetry || {};
+      article.telemetry.buildDays = Math.max(1, Number($('#editor-days').value || 1));
+      article.updatedAt = new Date().toISOString().slice(0, 10);
+
+      document.querySelectorAll('[data-section]').forEach(input => {
+        const idx = Number(input.dataset.section);
+        const field = input.dataset.field;
+        const value = input.value.trim();
+        const section = article.sections[idx];
+        if (!section) return;
+
+        if (field === 'heading' || field === 'content' || field === 'text' || field === 'attribution') {
+          section[field] = value;
+        } else if (field === 'items') {
+          section.items = value.split(/\n+/).map(item => item.trim()).filter(Boolean).map(text => section.type === 'checklist' ? ({ text, checked: true }) : text);
+        } else if (field === 'image.caption') {
+          section.image = section.image || {};
+          section.image.caption = value;
+        } else if (field === 'image.src') {
+          section.image = section.image || {};
+          section.image.src = value;
+        }
+      });
+
+      draftData.articles[articleIndex] = article;
+      closeEditor();
+      renderApp();
+    }
+
+    function attachEvents() {
+      document.querySelectorAll('[data-kind]').forEach(btn => btn.addEventListener('click', () => setKind(btn.dataset.kind)));
+      document.querySelectorAll('[data-tag]').forEach(btn => btn.addEventListener('click', () => setTag(btn.dataset.tag)));
+      document.querySelectorAll('[data-open-article]').forEach(btn => btn.addEventListener('click', () => goArticle(btn.dataset.openArticle)));
+      document.querySelectorAll('[data-edit-article]').forEach(btn => btn.addEventListener('click', () => openEditor(btn.dataset.editArticle)));
+      const back = $('#back-home');
+      if (back) back.addEventListener('click', goHome);
+      document.querySelectorAll('.toc-link').forEach(link => link.addEventListener('click', () => {
+        setTimeout(() => {
+          const target = document.querySelector(link.getAttribute('href'));
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+      }));
+    }
+
+    function triggerReveal() {
+      const items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(item => item.classList.add('visible'));
+        return;
+      }
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      items.forEach(item => observer.observe(item));
+    }
+
+    function renderApp() {
+      closeEditor();
+      const data = currentData();
+      const articleSlug = getRouteArticleSlug();
+      renderTopbar(articleSlug);
+      renderHero(articleSlug);
+
+      const app = $('#app');
+      const article = articleSlug ? articleBySlug(articleSlug) : null;
+      if (articleSlug && !article) {
+        app.className = 'empty-state';
+        app.innerHTML = 'That article could not be found. Head back to the index and pick another story.';
+        return;
+      }
+
+      app.className = '';
+      app.innerHTML = article ? buildArticleView(article) : renderHome(data.articles);
+      attachEvents();
+      triggerReveal();
+      document.title = article ? `${article.title} — ${data.site.name}` : data.site.name;
+    }
+
+    window.addEventListener('popstate', () => renderApp());
+
+    async function render() {
+      const res = await fetch('./data/content.json?v=' + Date.now());
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      sourceData = await res.json();
+      editMode = isEditMode();
+      draftData = editMode ? (loadLocalDraft() || JSON.parse(JSON.stringify(sourceData))) : null;
+      if (editMode) renderDraftBanner();
+      renderApp();
+    }
+
     render().catch(err => {
-      document.getElementById('eras').innerHTML =
-        '<p class="loading">failed to load content: ' + err.message + '</p>';
+      const app = $('#app');
+      app.className = 'loading';
+      app.textContent = `failed to load: ${err.message}`;
     });
   </script>
 </body>
